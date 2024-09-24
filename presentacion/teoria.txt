@@ -1,0 +1,29 @@
+Explicación de la Simulación
+
+Estructura del Script
+
+Clase Packet: Representa un paquete de datos que contiene información y
+un número de secuencia aleatorio.
+
+Clase TCP: Maneja el envío y la recepción de paquetes. 
+Al enviar un paquete, se imprime su contenido y número de secuencia. 
+Al recibir un ACK (confirmación), se registra el número de secuencia del paquete confirmado.
+
+Clase IP: Contiene una instancia de la clase TCP y simula la transmisión de paquetes. 
+Introduce una probabilidad del 10% para simular la pérdida de paquetes, lo que es común en redes reales.
+
+Función simulate_tcp_ip: Ejecuta la simulación enviando cinco paquetes a través de la capa IP.
+
+Relación con el Protocolo TCP/IP
+El script representa cómo funciona el protocolo TCP/IP en términos prácticos:
+
+División en Capas: El modelo TCP/IP está estructurado en capas (capa de aplicación, 
+capa de transporte, capa de red). En este script, 
+las clases representan estas capas donde IP actúa como la capa de red y TCP como la capa de transporte.
+
+Control de Flujo y Pérdida: El TCP se encarga del control de flujo y la retransmisión en caso de pérdida, 
+lo cual se simula aquí con el manejo aleatorio de la pérdida de paquetes.
+
+Numeración y Reconstrucción: Cada paquete tiene un número de secuencia que permite al receptor saber qué paquetes han sido recibidos correctamente y cuáles no, 
+lo que es esencial para reconstruir los datos originales.
+Este tipo de simulaciones es útil para entender cómo funcionan los protocolos en diferentes condiciones y para fines educativos.
