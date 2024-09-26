@@ -40,3 +40,6 @@ def simulate_tcp_ip():
         ip_layer.send(packet)
 
 simulate_tcp_ip()
+
+#ejecucion de los protocolos tcp/ip, para ver como funcionan cada una de las capas,
+#pero habria que agregar los endpoint para cada uno de las capas que se fueran.

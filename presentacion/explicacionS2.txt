@@ -1,0 +1,111 @@
+--------------PROCESO DE ENVIO------------------------
+1. Capa de Aplicación------------------------
+Función: application_layer(message)
+Mensaje Original: "hola"
+Acción: Convierte el mensaje a bytes.
+Resultado:
+Mensaje en bytes: b'hola'
+
+def application_layer(message):
+    print(f"Capa de Aplicación (Enviar): Mensaje original: '{message}'")
+    return message.encode('utf-8')  # Convierte a bytes
+
+2. Capa de Transporte (TCP)-------------------
+Función: transport_layer(data)
+Encabezado TCP Agregado:
+TCP_HEADER: TCP_HEADER: 4 bytes (donde 4 es la longitud del mensaje "hola").
+Acción: Agrega el encabezado TCP al mensaje en bytes.
+Resultado:
+Paquete TCP: b'TCP_HEADER: 4 byteshola'
+
+def transport_layer(data):
+    tcp_header = f'TCP_HEADER: {len(data)} bytes'
+    packet = tcp_header.encode('utf-8') + data
+    print(f"Capa de Transporte (Enviar): Paquete con encabezado TCP: '{packet}'")
+    return packet
+
+3. Capa de Red (IP)--------------------------------
+Función: network_layer(packet)
+Encabezado IP Agregado:
+IP_HEADER: IP_HEADER: 192.168.1.1 -> 192.168.1.2 (simulando direcciones IP de origen y destino).
+Acción: Agrega el encabezado IP al paquete TCP.
+Resultado:
+Paquete Completo: b'IP_HEADER: 192.168.1.1 -> 192.168.1.2TCP_HEADER: 4 byteshola'
+
+def network_layer(packet):
+    ip_header = 'IP_HEADER: 192.168.1.1 -> 192.168.1.2'
+    full_packet = ip_header.encode('utf-8') + packet
+    print(f"Capa de Red (Enviar): Paquete con encabezado IP: '{full_packet}'")
+    return full_packet
+
+Envío del Paquete-------------------------------------
+Función: send_packet(full_packet)
+Acción: Simula el envío del paquete completo.
+Resultado:
+Paquete enviado: b'IP_HEADER: 192.168.1.1 -> 192.168.1.2TCP_HEADER: 4 byteshola'
+
+def send_packet(full_packet):
+    print(f"Enviando paquete: '{full_packet}'")
+    return full_packet
+
+------------------PROCESO DE RECEPCION DEL MENSAJE-----------------------------
+1. Capa de Red (IP)
+Función: receive_packet(full_packet)
+Paquete Recibido:
+Paquete completo recibido por el servidor.
+Acción: Extrae el paquete TCP eliminando el encabezado IP.
+Resultado:
+Paquete TCP extraído: b'TCP_HEADER: 4 byteshola'
+
+def receive_packet(full_packet):
+    print(f"Recibiendo paquete: '{full_packet}'")
+    packet = network_layer_receive(full_packet)
+    return packet
+
+Capa de Red (Continuación)---------------------------
+Función: network_layer_receive(full_packet)
+Acción:
+Determina la longitud del encabezado IP y lo elimina.
+
+def network_layer_receive(full_packet):
+    ip_header_length = len('IP_HEADER: 192.168.1.1 -> 192.168.1.2')
+    packet = full_packet[ip_header_length:]  # Extraer el paquete TCP
+    print(f"Capa de Red (Recibir): Paquete sin encabezado IP: '{packet}'")
+    return packet
+
+2. Capa de Transporte (TCP)--------------------------------------
+Función: transport_layer_receive(packet)
+Paquete TCP Recibido:
+Paquete TCP extraído.
+Acción: Extrae los datos eliminando el encabezado TCP.
+Resultado:
+Datos extraídos: b'hola'
+
+def transport_layer_receive(packet):
+    tcp_header_length = len('TCP_HEADER: 4 bytes')
+    data = packet[tcp_header_length:]  # Extraer los datos
+    print(f"Capa de Transporte (Recibir): Datos sin encabezado TCP: '{data}'")
+    return data
+
+3. Capa de Aplicación---------------------------------
+Función: application_layer_receive(data)
+Datos Recibidos:
+Datos extraídos en bytes.
+Acción: Convierte los datos a una cadena legible y muestra el mensaje recibido.
+Resultado:
+Mensaje recibido finalizado: 'hola'
+
+def application_layer_receive(data):
+    message = data.decode('utf-8')  # Convertir bytes a string
+    print(f"Capa de Aplicación (Recibir): Mensaje recibido: '{message}'")
+
+--------------------------------------------------------------------------------
+Envío:
+La capa de aplicación toma el mensaje "hola" y lo convierte a bytes.
+La capa de transporte agrega un encabezado TCP que indica la longitud del mensaje.
+La capa de red agrega un encabezado IP que incluye las direcciones IP de origen y destino.
+El paquete completo se envía.
+Recepción:
+La capa de red recibe el paquete completo y elimina el encabezado IP, quedándose solo con el paquete TCP.
+La capa de transporte elimina el encabezado TCP, extrayendo los datos originales en bytes ("hola").
+La capa de aplicación convierte esos bytes en una cadena legible y muestra el mensaje recibido.
